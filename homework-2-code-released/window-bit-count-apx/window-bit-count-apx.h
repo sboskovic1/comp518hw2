@@ -105,6 +105,9 @@ uint64_t wnd_bit_count_apx_new(StateApx* self, uint32_t wnd_size, uint32_t k) {
 void wnd_bit_count_apx_destruct(StateApx* self) {
     // TODO: Fill me.
     free(self->buckets);
+    free(self->headsFree);
+    free(self->headsFull);
+    free(self->tailsFull);
     // Make sure you free the memory allocated on the heap.
 }
 
