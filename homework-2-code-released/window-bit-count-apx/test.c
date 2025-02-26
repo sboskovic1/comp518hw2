@@ -36,15 +36,15 @@ int main() {
             // printf("last output (approximate) = %u\n", last_output_apx);
             // printf("\n");
             if (last_output < last_output_apx) {
-                wnd_bit_count_apx_print(&state_apx);
+                // wnd_bit_count_apx_print(&state_apx);
                 printf("error: iteration %u\n", i);
-                printf("last_output: %u, last_output_apx: %u\n", last_output, last_output_apx);
+                printf("last_output: %u, last_output_apx: %u, time: %u\n", last_output, last_output_apx, state_apx.now);
                 printf("manual count: %u\n", manual_count(&state_apx));
             }
             assert(last_output >= last_output_apx);
             uint32_t error_abs = last_output - last_output_apx;
             if (K * error_abs > last_output) {
-                wnd_bit_count_apx_print(&state_apx);
+                // wnd_bit_count_apx_print(&state_apx);
                 printf("error: iteration %u\n", i);
                 printf("K: %u, error_abs: %u, last_output: %u, last_output_apx: %u\n", K, error_abs, last_output, last_output_apx);
             }
