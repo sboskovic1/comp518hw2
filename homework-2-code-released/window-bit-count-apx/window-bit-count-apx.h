@@ -124,10 +124,11 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
     int categories = self->categories;
 
     self->now++;
+    uint32_t merge_time = self->now;
     int size = 1;
     for (int i = 0; i < categories; i++) {
         if (headsFull[i] != NULL && self->now - headsFull[i]->timestamp >= self->wnd_size) {
-            printf("Removing size %u (bucket %u) at %u\n", size, i, self->now);
+            // printf("Removing size %u (bucket %u) at %u\n", size, i, self->now);
             self->count -= size;
             struct Bucket *tmp = headsFull[i];
             headsFull[i] = headsFull[i]->prev;
@@ -139,8 +140,7 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
             tmp->prev = NULL;
             headsFree[i] = tmp;
         } else if (headsFull[i] != NULL) {
-            printf("Remove at: %u\n", headsFull[i]->timestamp);
-            
+            // printf("Remove at: %u\n", headsFull[i]->timestamp);
         }
         size *= 2;
     }
@@ -151,7 +151,7 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
             if (headsFree[i] != NULL) {
                 // Free bucket available in category, claim it and move it to highest timestamp full bucket
                 Bucket *tmp = headsFree[i];
-                tmp->timestamp = self->now;
+                tmp->timestamp = merge_time;
                 headsFree[i] = tmp->next;
                 if (tailsFull[i] == NULL) {
                     tailsFull[i] = tmp;
@@ -164,11 +164,12 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
                     tmp->prev = NULL;
                     tailsFull[i] = tmp;
                 }
-                printf("Placed size %u at %u\n", i + 1, self->now);
+                // printf("Placed size %u at %u\n", i + 1, self->now);
                 break;
             } else {
                 // No free bucket available in category, free up highest timestamp bucket
                 // and merge it into next category
+                merge_time = tailsFull[i]->timestamp;
                 tailsFull[i]->timestamp = 0;
                 Bucket *tmp = tailsFull[i];
                 tailsFull[i] = tailsFull[i]->next;
@@ -250,6 +251,21 @@ uint32_t manual_count(StateApx* self) {
         }
     }
     return count;
+}
+
+void manual_count_by_bucket(StateApx* self) {
+    printf("Manual count: \n");
+    uint32_t count = 0;
+    int size = 1;
+    for (int i = 0; i < self->categories; i++) {
+        struct Bucket *tmp = self->headsFull[i];
+        while (tmp != NULL) {
+            count++;
+            tmp = tmp->prev;
+        }
+        printf("Size %u: %i\n", i + 1, count);
+        count = 0;
+    }    
 }
 
 #endif // _WINDOW_BIT_COUNT_APX_
