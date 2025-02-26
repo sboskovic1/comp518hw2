@@ -169,6 +169,7 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
             } else {
                 // No free bucket available in category, free up highest timestamp bucket
                 // and merge it into next category
+                N_MERGES++;
                 merge_time = tailsFull[i]->timestamp;
                 tailsFull[i]->timestamp = 0;
                 Bucket *tmp = tailsFull[i];
