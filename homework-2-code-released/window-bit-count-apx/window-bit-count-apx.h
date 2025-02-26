@@ -186,58 +186,6 @@ uint32_t wnd_bit_count_apx_next(StateApx* self, bool item) {
         }
     }
 
-
-
-//     // TODO: Fill me.
-//     self->now++;
-//     int size = 1;
-//     int bucket = 0;
-//     int size_category = 0;
-//     bool placed = false;
-//     int k = self->k;
-//     int num_buckets = self->num_buckets;
-//     int newest_idx = -1;
-//     uint32_t newest_time = 0;
-//     uint32_t prev_time = 0;
-//     while (size <= self->maxSize) {
-//         for (int i = size_category; i < k + 1 && i + k * size_category < num_buckets; i++) {
-//             if (self->buckets[i + k * size_category].timestamp != 0 && self->now - self->buckets[i + k * size_category].timestamp >= self->wnd_size) {
-//                 // printf("Removing bucket %u: %u - %u > %u\n", i + k * size_category, self->now, self->buckets[i + k * size_category].timestamp, self->count);
-//                 self->count -= self->buckets[i + k * size_category].size * size;
-//                 self->buckets[i + k * size_category].size = 0;
-//                 self->buckets[i + k * size_category].timestamp = 0;
-//             }
-//             if (item == 1 && !placed) {
-//                 if (self->buckets[i + k * size_category].size == 0) {
-//                     // printf("placed in bucket %u at size %u\n", i + k * size_category, size);
-//                     self->buckets[i + k * size_category].size = 1;
-//                     if (size_category == 0) {
-//                         self->buckets[i + k * size_category].timestamp = self->now;
-//                     } else {
-//                         self->buckets[i + k * size_category].timestamp = prev_time;
-//                     }
-//                     placed = true;
-//                 } else if (newest_idx == -1 || self->buckets[i + k * size_category].timestamp > newest_time) {
-//                     newest_time = self->buckets[i + k * size_category].timestamp;
-//                     newest_idx = i + k * size_category;
-//                 }    
-//             }
-//         }
-//         if (!placed) {
-//             prev_time = newest_time;
-//             self->buckets[newest_idx].size = 0;
-//             self->buckets[newest_idx].timestamp = 0;
-//             newest_idx = -1;
-//             newest_time = 0;
-//         }
-
-//         size *= 2;
-//         size_category++;
-//     }
-//     if (item == 1) {
-//         self->count++;
-//     }
-
     return self->count;
 }
 
